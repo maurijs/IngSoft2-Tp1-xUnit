@@ -25,11 +25,13 @@ public class Tienda{
     }
 
     public bool EliminarProducto(string nombre){
-        IProducto? producto = inventario.FirstOrDefault(p => p.Nombre == nombre);
+        var producto = inventario.FirstOrDefault(p => p.Nombre == nombre);
         if (producto != null){
-            var result = inventario.Remove(producto);
-            if(result) return true;
-            throw new KeyNotFoundException($"El producto {nombre} no se pudo eliminar de manera correcta");
+            var index = inventario.FindIndex(p => p.Nombre == nombre); 
+            // Encontramos de esta forma ya que FakeItEasy no tiene una implementación correcta de Equals, entonces IndexOf no puede encontrar la instancia correcta,
+            // devolviendo 0
+            inventario.RemoveAt(index);
+            return true;
         }
         throw new KeyNotFoundException($"El producto {nombre} no se encontro en el inventario");
     }
@@ -39,5 +41,10 @@ public class Tienda{
         var producto = BuscarProducto(nombreProducto);
         float nuevoPrecio = (float)(producto.Precio * (1 - porcentajeDescuento / 100));
         producto.ActualizarPrecio(nuevoPrecio);
+    }
+
+    public void LimpiarInventario()
+    {
+        inventario.Clear();  // Limpia todos los productos del inventario
     }
 }
