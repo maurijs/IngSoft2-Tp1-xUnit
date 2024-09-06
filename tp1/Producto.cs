@@ -1,7 +1,7 @@
 ﻿namespace Tienda;
 
-public class Producto{
-    private string nombre;  //Para poder utilizar sus prop en los mock
+public class Producto: IProducto{
+    private string nombre; 
     private float precio;
     private string categoria;
 

@@ -20,36 +20,39 @@ namespace UnitTesting
     they may require checking multiple facets of a system. Assertions will ultimately determine if the test passes
     or fails.*/
 
-    public class test_tienda
+    public class Test_tienda
     {
         [Fact]
         public void AgregarProductoTest()
         {
             // Arrange
             var tienda = new Tienda.Tienda();
-            var producto = new Producto("Manzana", 0.50f, "Comestibles");
+            var productoFake = A.Fake<IProducto>();
+            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
 
             // Act
-            tienda.AgregarProducto(producto);
+            tienda.AgregarProducto(productoFake);
 
             // Assert
-            Assert.Contains(producto, tienda.Inventario);
+            Assert.Contains(productoFake, tienda.Inventario);
         }
-
 
         [Fact]
         public void BuscarProductoTest()
         {
             //Arrange
             var tienda = new Tienda.Tienda();
-            var producto = new Producto("Manzana", 0.50f, "Fruta");
-            tienda.AgregarProducto(producto);
+            var productoFake = A.Fake<IProducto>();
+            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
+            tienda.AgregarProducto(productoFake);
 
             //Act
-            var productoEncontrado = tienda.BuscarProducto(producto.Nombre);
+            var productoEncontrado = tienda.BuscarProducto(productoFake.Nombre);
 
             //Assert
-            Assert.Equal(producto, productoEncontrado);
+            Assert.Equal(productoFake, productoEncontrado);
         }
 
         [Fact]
@@ -57,8 +60,10 @@ namespace UnitTesting
         {
             //Arrange
             var tienda = new Tienda.Tienda();
-            var producto = new Producto("Manzana", 0.50f, "Fruta");
-            tienda.AgregarProducto(producto);
+            var productoFake = A.Fake<IProducto>();
+            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
+            tienda.AgregarProducto(productoFake);
 
 
             // Act & Assert
@@ -70,14 +75,16 @@ namespace UnitTesting
         {
             //Arrange
             var tienda = new Tienda.Tienda();
-            var producto = new Producto("Manzana", 0.50f, "Fruta");
-            tienda.AgregarProducto(producto);
+            var productoFake = A.Fake<IProducto>();
+            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
+            tienda.AgregarProducto(productoFake);
 
             //Act
-            tienda.EliminarProducto(producto.Nombre);
+            tienda.EliminarProducto(productoFake.Nombre);
 
             //Assert
-            Assert.DoesNotContain(producto, tienda.Inventario);
+            Assert.DoesNotContain(productoFake, tienda.Inventario);
         }
 
         [Fact]
@@ -85,8 +92,10 @@ namespace UnitTesting
         {
             // Arrange
             var tienda = new Tienda.Tienda();
-            var producto = new Producto("Manzana", 0.50f, "Fruta");
-            tienda.AgregarProducto(producto);
+            var productoFake = A.Fake<IProducto>();
+            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
+            tienda.AgregarProducto(productoFake);
 
             // Act & Assert
             Assert.Throws<KeyNotFoundException>(() => tienda.EliminarProducto("Pera"));
@@ -99,7 +108,7 @@ namespace UnitTesting
         public void AplicarDescuentoTest()
         {
             // Arrange
-            var productoFake = A.Fake<Producto>();
+            var productoFake = A.Fake<IProducto>();
             float porcentajeDescuento = 10;
             float precioActual = 200; // Variable local para mantener el estado del precio
             float precioEsperado = precioActual * (1 - porcentajeDescuento / 100);

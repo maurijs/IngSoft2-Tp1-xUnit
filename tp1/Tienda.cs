@@ -2,20 +2,20 @@ using System.Collections.Generic;
 namespace Tienda;
 
 public class Tienda{
-    private List<Producto> inventario;
+    private List<IProducto> inventario;
 
-    public List<Producto> Inventario { get => inventario; set => inventario = value; }
+    public List<IProducto> Inventario { get => inventario; set => inventario = value; }
 
     public Tienda(){
-        inventario = new List<Producto>();
+        inventario = new List<IProducto>();
     }
 
-    public void AgregarProducto(Producto producto){
+    public void AgregarProducto(IProducto producto){
         inventario.Add(producto);
     }
 
-    public Producto BuscarProducto(string nombre){
-        foreach(Producto producto in inventario){
+    public IProducto BuscarProducto(string nombre){
+        foreach(IProducto producto in inventario){
             if(producto.Nombre == nombre){
                 return producto;
             }
@@ -25,7 +25,7 @@ public class Tienda{
     }
 
     public bool EliminarProducto(string nombre){
-        Producto producto = BuscarProducto(nombre);
+        IProducto producto = BuscarProducto(nombre);
         if(producto != null){
             inventario.Remove(producto);
             return true;
