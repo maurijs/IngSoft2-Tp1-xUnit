@@ -27,15 +27,17 @@ namespace UnitTesting
         private Fixture? _fixture;
         private Tienda.Tienda _tienda;
 
+        // Setup: Se ejecuta antes de cada prueba
         public Test_tienda_fixture()
         {
             //  sirve para configurar AutoFixture de tal manera que cuando se necesite crear mocks de interfaces o
             //  clases abstractas, lo haga utilizando FakeItEasy en lugar de generarlos manualmente o con otra biblioteca de mockin
 
-            _fixture = (Fixture?)new Fixture().Customize(new AutoFakeItEasyCustomization() { ConfigureMembers = true });// Personalización para FakeItEasy
-                                                                                                                        // ConfigureMembers = true es para asignar valores a los mocks, si no vienen vacios
+            _fixture = (Fixture?)new Fixture().Customize(new AutoFakeItEasyCustomization() { ConfigureMembers = true });
+            // ConfigureMembers = true es para asignar valores a los mocks, si no vienen vacios
+            
             _tienda = _fixture.Create<Tienda.Tienda>();
-            var productos = _fixture.CreateMany<IProducto>().ToList(); // 5 productos de ejemplo
+            var productos = _fixture.CreateMany<IProducto>().ToList(); // productos de ejemplo
             foreach (var producto in productos)
             {
                 _tienda.AgregarProducto(producto);
@@ -137,9 +139,12 @@ namespace UnitTesting
             Assert.Equal(precioEsperado, prodActualizado.Precio);
         }
 
-        public void Dispose()
+        //Después de que la prueba termine(ya sea exitosa o fallida), xUnit llamará automáticamente a Dispose() para
+        //limpiar los recursos o realizar cualquier tarea necesaria de "teardown" (como limpiar el inventario).
+        public void Dispose() 
         {
-            _tienda.LimpiarInventario();  // Limpieza del estado de la tienda
+            _tienda.LimpiarInventario(); 
+            GC.SuppressFinalize(this);
         }
     }
 }
