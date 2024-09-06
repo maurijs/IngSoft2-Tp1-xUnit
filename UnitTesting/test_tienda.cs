@@ -75,16 +75,28 @@ namespace UnitTesting
         {
             //Arrange
             var tienda = new Tienda.Tienda();
-            var productoFake = A.Fake<IProducto>();
-            A.CallTo(() => productoFake.Nombre).Returns("Manzana");
-            A.CallTo(() => productoFake.Categoria).Returns("Fruta");
-            tienda.AgregarProducto(productoFake);
+            var productoFake1 = A.Fake<IProducto>();
+            var productoFake2 = A.Fake<IProducto>();
+            var productoFake3 = A.Fake<IProducto>();
+
+            A.CallTo(() => productoFake1.Nombre).Returns("Manzana");
+            A.CallTo(() => productoFake1.Categoria).Returns("Fruta");
+
+            A.CallTo(() => productoFake2.Nombre).Returns("Naranja");
+            A.CallTo(() => productoFake2.Categoria).Returns("Fruta");
+
+            A.CallTo(() => productoFake3.Nombre).Returns("Pera");
+            A.CallTo(() => productoFake3.Categoria).Returns("Fruta");
+
+            tienda.AgregarProducto(productoFake1);
+            tienda.AgregarProducto(productoFake2);
+            tienda.AgregarProducto(productoFake3);
 
             //Act
-            tienda.EliminarProducto(productoFake.Nombre);
+            tienda.EliminarProducto(productoFake2.Nombre);
 
             //Assert
-            Assert.DoesNotContain(productoFake, tienda.Inventario);
+            Assert.DoesNotContain(productoFake2, tienda.Inventario);
         }
 
         [Fact]

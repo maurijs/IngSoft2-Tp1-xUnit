@@ -1,7 +1,10 @@
-﻿internal class Program
+﻿using Tienda;
+
+public class Program
 {
     private static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
+        
     }
 }

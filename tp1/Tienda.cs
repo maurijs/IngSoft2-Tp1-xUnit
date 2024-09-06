@@ -25,12 +25,13 @@ public class Tienda{
     }
 
     public bool EliminarProducto(string nombre){
-        IProducto producto = BuscarProducto(nombre);
-        if(producto != null){
-            inventario.Remove(producto);
-            return true;
+        IProducto? producto = inventario.FirstOrDefault(p => p.Nombre == nombre);
+        if (producto != null){
+            var result = inventario.Remove(producto);
+            if(result) return true;
+            throw new KeyNotFoundException($"El producto {nombre} no se pudo eliminar de manera correcta");
         }
-        throw new KeyNotFoundException($"El producto {nombre} no se pudo eliminar de manera correcta");
+        throw new KeyNotFoundException($"El producto {nombre} no se encontro en el inventario");
     }
 
     public void AplicarDescuento(string nombreProducto, float porcentajeDescuento)

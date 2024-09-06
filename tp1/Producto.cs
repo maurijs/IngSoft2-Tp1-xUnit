@@ -21,4 +21,18 @@ public class Producto: IProducto{
         }
         Precio = nuevoPrecio;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Producto other)
+        {
+            return this.Nombre == other.Nombre;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Nombre.GetHashCode();
+    }
 }
