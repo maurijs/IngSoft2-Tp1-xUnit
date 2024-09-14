@@ -4,5 +4,5 @@ las librerias FakeItEasy y AutoFixture
 
 #### Miembros del grupo:
   Suárez, Mauricio
-  Pedraza Gervan, Nicolas
+  Pedraza Gervan, Nicolas 
   Alonso Ruiz, Tadeo
