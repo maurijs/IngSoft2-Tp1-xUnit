@@ -3,6 +3,6 @@ Trabajo practico 1 - Ing. de software 2. En el implementamos pruebas unitarias a
 las librerias FakeItEasy y AutoFixture
 
 #### Miembros del grupo:
-  Suárez, Mauricio
-  Pedraza Gervan, Nicolas 
+  Suárez, Mauricio  
+  Pedraza Gervan, Nicolas  
   Alonso Ruiz, Tadeo
