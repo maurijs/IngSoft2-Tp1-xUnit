@@ -1,0 +1,82 @@
+﻿1)
+Podemos identificar pruebas de unidad entendiendo que se centran en una parte especifica del codigo. Las pruebas que realizamos
+como AgregarProducto, BuscarProducto, y EliminarProducto son pruebas unitarias, que son muy atómicas como para ser pruebas de 
+integración. 
+
+2) Podría haber escrito las pruebas primero antes de modificar el código de la aplicación?
+
+ Si, es lo que se conoce como Desarrollo guiado por pruebas de software, o Test-driven development (TDD). Es una práctica de 
+ ingeniería de software que involucra otras dos prácticas: Escribir las pruebas primero (Test First Development) y Refactorización 
+ (Refactoring). Para escribir las pruebas generalmente se utilizan las pruebas unitarias. En primer lugar, se escribe una prueba y se 
+ verifica que la nueva prueba falla. A continuación, se implementa el código que hace que la prueba pase satisfactoriamente y seguidamente 
+ se refactoriza el código escrito. El propósito del desarrollo guiado por pruebas es lograr un código limpio que funcione. La idea es que 
+ los requisitos sean traducidos a pruebas, de este modo, cuando las pruebas pasen se garantizará que el software cumple con los requisitos 
+ que se han establecido.
+
+ ¿Cómo sería el proceso de escribir primero los tests?
+
+1.Elegir un requisito: Se elige de una lista el requisito que se cree que nos dará mayor conocimiento del problema y que a la vez sea fácilmente implementable.
+2.Escribir una prueba: Se comienza escribiendo una prueba para el requisito. Para ello el programador debe entender claramente las especificaciones y los requisitos de 
+la funcionalidad que está por implementar. Este paso fuerza al programador a tomar la perspectiva de un cliente considerando el código a través de sus interfaces.
+3.Verificar que la prueba falla: Si la prueba no falla es porque el requisito ya estaba implementado o porque la prueba es errónea.
+4.Escribir la implementación: Escribir el código más sencillo que haga que la prueba funcione. Se usa la expresión "Déjelo simple" ("Keep It Simple, Stupid!"), conocida 
+como principio KISS.
+5.Ejecutar las pruebas automatizadas: Verificar si todo el conjunto de pruebas funciona correctamente.
+6.Eliminación de duplicación: El paso final es la refactorización, que se utilizará principalmente para eliminar código duplicado. Se hace un pequeño cambio cada vez y
+luego se corren las pruebas hasta que funcionen.
+7.Actualización de la lista de requisitos: Se actualiza la lista de requisitos tachando el requisito implementado. Asimismo se agregan requisitos que se hayan visto como 
+necesarios durante este ciclo y se agregan requisitos de diseño (P. ej que una funcionalidad esté desacoplada de otra).
+
+Fuente: https://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas
+
+3)
+Controladores: no implementados
+
+Resguardos: reconocemos los resguardos en AplicarDescuento, ya que usamos un mock para simular el AgregarProducto, para posteriormente probar
+la funcionalidad de AplicarDescuento 
+
+Mock: Un objeto simulado que imita el comportamiento de un objeto real que sirve para aislarlo de las dependencias. Otros términos para objetos simulados
+incluyen stubs, fakes, spies, y dummies.
+
+4) Ventajas del uso de Fixtures en pruebas unitarias
+Un fixture en el contexto de pruebas unitarias se refiere a un conjunto de datos, objetos o entorno de prueba que se configura antes de la ejecución
+de las pruebas. El uso de fixtures tiene varias ventajas:
+
+1. Reutilización de Código
+Los fixtures permiten crear un conjunto de datos o un estado inicial reutilizable para varias pruebas. Esto evita la duplicación de código al configurar
+el mismo entorno o datos para diferentes casos de prueba. Al usar un fixture, puedes configurar una tienda con productos predefinidos antes de cada prueba, 
+en lugar de tener que crear productos manualmente en cada una.
+
+2. Mantenimiento Simplificado
+Si necesitas cambiar la configuración inicial (como añadir más productos o cambiar las dependencias), solo necesitas modificar el fixture una vez, y el cambio 
+se aplicará a todas las pruebas que lo utilicen. Esto reduce el esfuerzo de mantenimiento.
+
+3. Pruebas Más Limpias
+Las pruebas se centran solo en la lógica específica que están verificando, sin preocuparse por la configuración repetitiva. Esto hace que las pruebas sean más 
+limpias y más fáciles de leer.
+
+4. Aislamiento y Consistencia
+El uso de fixtures asegura que todas las pruebas comiencen desde el mismo estado inicial, lo que mejora la consistencia y reduce la posibilidad de errores debidos 
+a estados previos.
+
+5. Eficiencia
+En algunas pruebas, configurar y reutilizar un fixture puede ahorrar tiempo, ya que no necesitas repetir la misma configuración en cada prueba.
+Enfoque Aplicado: Automatización de la Configuración
+
+Conceptos de Setup y Teardown en Testing
+En el contexto de pruebas, los términos Setup y Teardown se refieren a las operaciones que se realizan antes y después de ejecutar una prueba, respectivamente.
+
+1. Setup (Configuración Inicial)
+El setup es el código que configura el entorno de pruebas antes de la ejecución de cada prueba. Es donde se inicializan los objetos, se crean los datos necesarios
+y se configuran las dependencias. Su propósito es garantizar que cada prueba comience desde un estado conocido y controlado. En xUnit, el equivalente al setup se 
+puede implementar dentro de un constructor o utilizando un atributo como [Fact] o [Theory].
+
+2. Teardown (Limpieza)
+El teardown es el código que se ejecuta después de la prueba para limpiar el entorno de prueba y eliminar cualquier estado residual que pueda afectar otras
+pruebas. El propósito del teardown es asegurar que las pruebas no afecten otras pruebas debido a datos residuales.
+
+5)
+Si se da una situacion donde se necesite probar primero las funcionalidades de producto (nivel bajo) antes de probar las funcionalidades de tienda (nivel alto)
+Un ejemplo de esto seria el test de EliminarProducto. En este caso, estamos probando primero los componentes más simples como Producto, luego el Inventario, y 
+finalmente la clase mayor Tienda. Esta prueba de integración nos permitirá verificar que el método EliminarProducto funcione correctamente
+cuando está integrado con todas las demás partes del sistema.
