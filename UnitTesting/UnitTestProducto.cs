@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FakeItEasy;
 using Tienda;
 
 
 namespace UnitTesting
 {
-    public class test_producto
+    public class UnitTestProducto
     {
         [Fact]
         public void ActualizarPrecioTest()
@@ -28,7 +29,6 @@ namespace UnitTesting
         public void ActualizarPrecioNegativoTest()
         {
             // Arrange
-            var tienda = new Tienda.Tienda();
             var producto = new Producto("Manzana", 0.50f, "Fruta");
 
             //Act && Assert

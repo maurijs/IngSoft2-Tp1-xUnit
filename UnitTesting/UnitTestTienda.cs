@@ -8,19 +8,8 @@ using FakeItEasy; //Libreria mock
 
 namespace UnitTesting
 {
-    /*ARRANGE inputs and targets. Arrange steps should set up the test case. Does the test require any objects 
-    or special settings? Does it need to prep a database? Does it need to log into a web app? Handle all of these
-    operations at the start of the test.
-    
-    ACT on the target behavior. Act steps should cover the main thing to be tested. This could be calling a function
-    or method, calling a REST API, or interacting with a web page. Keep actions focused on the target behavior.
-
-    ASSERT expected outcomes. Act steps should elicit some sort of response. Assert steps verify the goodness or 
-    badness of that response. Sometimes, assertions are as simple as checking numeric or string values. Other times,
-    they may require checking multiple facets of a system. Assertions will ultimately determine if the test passes
-    or fails.*/
-
-    public class Test_tienda
+  
+    public class UnitTestTienda
     {
         [Fact]
         public void AgregarProductoTest()

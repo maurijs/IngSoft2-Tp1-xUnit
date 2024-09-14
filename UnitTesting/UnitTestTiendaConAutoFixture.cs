@@ -11,38 +11,32 @@ using Microsoft.Win32;
 using System.Buffers.Text;
 using System.Linq.Expressions;
 using System;
-// Fixture: instancia real, valores random
-// Mock: instancia falsa, puede usarse con fixture para no poner los valores a mano
+
 //https://autofixture.github.io/docs/quick-start/
 
 //  DETALLE A CONSIDERAR EN EL USO DE MOCKS: las librerias pueden no tener implementados de forma correcta los 
-//  metodos como Equals y GetHashCode. Por lo que conviene hacer override de los metodos o sino evitar hacer comparaciones
-//  entre Mocks por REFERENCIA
-
+//  metodos como Equals y GetHashCode. Por lo que conviene hacer override de los metodos o sino evitar hacer comparaciones entre Mocks por REFERENCIA
 
 namespace UnitTesting
 {
-    public class Test_tienda_fixture:IDisposable //AutoFixture no implementa teardown, por lo que lo implementamos manualmente
+    public class UnitTestTiendaConAutoFixture:IDisposable //AutoFixture no implementa teardown, por lo que lo implementamos manualmente
     {
-        private Fixture? _fixture;
-        private Tienda.Tienda _tienda;
+        private readonly Fixture? _fixture;
+        private readonly Tienda.Tienda _tienda;
 
         // Setup: Se ejecuta antes de cada prueba
-        public Test_tienda_fixture()
+        public UnitTestTiendaConAutoFixture()
         {
-            //  sirve para configurar AutoFixture de tal manera que cuando se necesite crear mocks de interfaces o
-            //  clases abstractas, lo haga utilizando FakeItEasy en lugar de generarlos manualmente o con otra biblioteca de mockin
-
-            _fixture = (Fixture?)new Fixture().Customize(new AutoFakeItEasyCustomization() { ConfigureMembers = true });
+            _fixture = (Fixture?)new Fixture()
+                .Customize(new AutoFakeItEasyCustomization() { ConfigureMembers = true });
+                
+            //fixture.Customize<IProducto>(c => c.With(p => p.Precio, 10)); 
             // ConfigureMembers = true es para asignar valores a los mocks, si no vienen vacios
-            
+
             _tienda = _fixture.Create<Tienda.Tienda>();
-            var productos = _fixture.CreateMany<IProducto>().ToList(); // productos de ejemplo
-            foreach (var producto in productos)
-            {
-                _tienda.AgregarProducto(producto);
-            }
-            // Para poder reutilizar los datos de las pruebas
+      
+            _tienda.Inventario = _fixture.CreateMany<IProducto>().Where(x => x.Precio > 0).ToList();
+            _tienda.Carrito = _tienda.Inventario;
         }
 
         [Fact]
@@ -115,13 +109,11 @@ namespace UnitTesting
         }
 
 
-        [Fact]
-        public void AplicarDescuentoTest()
+        [Theory,AutoData]
+        public void AplicarDescuentoTest(float porcentajeDescuento, float precioActual)
         {
             // Arrange
             var producto = _fixture.Create<IProducto>();
-            float porcentajeDescuento = 10;
-            float precioActual = 100;  // Variable local para mantener el estado del precio
             float precioEsperado = precioActual * (1 - porcentajeDescuento / 100);
 
             // Configurar la propiedad Precio para que sea mutable usando precioActual
@@ -139,11 +131,40 @@ namespace UnitTesting
             Assert.Equal(precioEsperado, prodActualizado.Precio);
         }
 
+        [Fact]
+        public void AgregarAlCarritoTest() 
+        {
+            var producto = _fixture.Create<IProducto>();
+            _tienda.AgregarProducto(producto);
+
+            _tienda.AgregarAlCarrito(producto);
+
+            //Act
+            var productoEncontrado = _tienda.Carrito.FirstOrDefault(p => p.Nombre == producto.Nombre);
+
+            //Assert
+            Assert.NotNull(productoEncontrado); 
+            // Entre mocks conviene comparar con propiedades y no por referencia
+        }
+
+        [Fact]
+        public void CalcularTotalCarrito() 
+        {
+            float totalEsperado = 0;
+            foreach (var p in _tienda.Carrito)
+            {
+                _tienda.AplicarDescuento(p.Nombre, 10);
+                totalEsperado += p.Precio;
+            }
+
+            Assert.Equal(totalEsperado, _tienda.CalcularTotalCarrito());
+        }
         //Después de que la prueba termine(ya sea exitosa o fallida), xUnit llamará automáticamente a Dispose() para
         //limpiar los recursos o realizar cualquier tarea necesaria de "teardown" (como limpiar el inventario).
         public void Dispose() 
         {
             _tienda.LimpiarInventario(); 
+            _tienda.LimpiarCarrito();
             GC.SuppressFinalize(this);
         }
     }
